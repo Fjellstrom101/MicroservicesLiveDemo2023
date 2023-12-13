@@ -6,6 +6,9 @@ networks:
     questions:
     gateway:
     client:
+    questions-rabbitmq:
+    quiz-rabbitmq:
+    highscore-rabbitmq:
 
 services:
   quizgateway:
@@ -73,6 +76,7 @@ services:
     image: mcr.microsoft.com/mssql/server:2019-latest
     networks:
       - highscore
+      - highscore-rabbitmq
     ports:
         - "7000:1433"
     environment:
@@ -85,6 +89,7 @@ services:
     image: mongo:latest
     networks:
       - questions
+      - questions-rabbitmq
     ports:
       - "7002:27017"
 
@@ -93,6 +98,7 @@ services:
     image: mongo:latest
     networks:
       - quiz
+      - quiz-rabbitmq
     ports:
       - "7001:27017"
 
@@ -105,4 +111,21 @@ services:
       - client
     depends_on:
       - quizgateway
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    ports:
+        - 5672:5672
+        - 15672:15672
+    environment:
+      - RABBITMQ_DEFAULT_USER=admin
+      - RABBITMQ_DEFAULT_PASS=Labb2!123
+    networks:
+      - questions-rabbitmq
+      - quiz-rabbitmq
+      - highscore-rabbitmq
+    depends_on:
+      - highscore.api
+      - quiz.api
+      - questions.api
 
