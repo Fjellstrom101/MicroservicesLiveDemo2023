@@ -47,6 +47,18 @@
         }
       ],
       "DownstreamPathTemplate": "/"
+    },
+    {
+      "UpstreamPathTemplate": "/users",
+      "UpstreamHttpMethod": [ "Get" ],
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "authorization.api",
+          "Port": 8080
+        }
+      ],
+      "DownstreamPathTemplate": "/"
     }
   ],
   "GlobalConfiguration": {

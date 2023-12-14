@@ -18,8 +18,4 @@
     <ProjectReference Include="..\..\..\..\Domain\Domain.Common\Domain.Common.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Models\" />
-  </ItemGroup>
-
 </Project>

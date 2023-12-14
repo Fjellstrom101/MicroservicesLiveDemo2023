@@ -1,5 +1,5 @@
-global using FastEndpoints;
-using HighScore.DataAccess;
+using Authorization.DataAccess;
+using FastEndpoints;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,9 +11,9 @@ var password = Environment.GetEnvironmentVariable("DB_MSSQL_SA_PASSWORD");
 var connectionString =
     $"Data Source={host};Initial Catalog={database};User ID={username};Password={password};Trusted_connection=False;TrustServerCertificate=True;";
 
-builder.Services.AddSqlServer<HighScoreContext>(connectionString);
+builder.Services.AddSqlServer<AuthorizationContext>(connectionString);
 builder.Services.AddFastEndpoints();
-builder.Services.AddScoped<IHighScoreRepository, HighScoreRepository>();
+builder.Services.AddScoped<IAuthorizationRepository, AuthorizationRepository>();
 
 var app = builder.Build();
 

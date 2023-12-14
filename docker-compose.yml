@@ -1,6 +1,7 @@
 version: '3.4'
 
 networks:
+    authorization:
     highscore:
     quiz:
     questions:
@@ -16,6 +17,7 @@ services:
     networks:
       - gateway
       - client
+      - authorization
     depends_on:
       - highscore.api
       - quiz.api
@@ -68,6 +70,20 @@ services:
       - DB_HOST=quiz.db
       - DB_DATABASE=QuizDB
 
+  authorization.api:
+    image: ${DOCKER_REGISTRY-}authorizationapi
+    build:
+      context: .
+      dockerfile: MicroServices/APIs/Authorization/Authorization.API/Dockerfile
+    networks:
+      - authorization
+    environment:
+      - DB_HOST=authorization.db
+      - DB_DATABASE=AuthorizationDB
+      - DB_USER=sa
+      - DB_MSSQL_SA_PASSWORD=Pwd123!!1
+
+
   highscore.db:
     container_name: highscoredb
     image: mcr.microsoft.com/mssql/server:2019-latest
@@ -95,6 +111,18 @@ services:
       - quiz
     ports:
       - "7001:27017"
+
+  authorization.db:
+    container_name: authorizationdb
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    networks:
+      - authorization
+    ports:
+        - "7003:1433"
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=Pwd123!!1
+      - MSSQL_PID=Developer
 
   megaquiz:
     image: ${DOCKER_REGISTRY-}megaquiz
